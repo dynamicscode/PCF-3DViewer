@@ -63,7 +63,8 @@ export class viewer3d implements ComponentFramework.StandardControl<IInputs, IOu
 
 	private createScene(data: string): Scene {
 		var scene: Scene = new Scene(this.engine);
-		scene.createDefaultCameraOrLight();;
+		scene.createDefaultCameraOrLight();
+		scene.clearColor = new BABYLON.Color4(1,0,0,0);
 
 		var base64_model_content = data;
 		var raw_content = Tools.DecodeBase64(base64_model_content);
