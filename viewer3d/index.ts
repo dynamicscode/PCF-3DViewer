@@ -5,7 +5,6 @@ import 'babylonjs-loaders';
 export class viewer3d implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 
 	private container: HTMLDivElement;
-	private context: ComponentFramework.Context<IInputs>
 	private canvasElement: HTMLCanvasElement;
 	private engine: Engine;
 	private data: string;
@@ -26,15 +25,13 @@ export class viewer3d implements ComponentFramework.StandardControl<IInputs, IOu
 	 * @param container If a control is marked control-type='standard', it will receive an empty div element within which it can render its content.
 	 */
 	public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void, state: ComponentFramework.Dictionary, container: HTMLDivElement) {
-		this.context = context;
 		this.container = container;
 
 		this.canvasElement = document.createElement('canvas');
 		this.canvasElement.style.width = '100%';
+		this.canvasElement.style.height = '100%';
 		this.container.appendChild(this.canvasElement);
 		this.engine = new Engine(this.canvasElement, true);
-
-		this.load3DModel();
 	}
 
 
@@ -43,7 +40,9 @@ export class viewer3d implements ComponentFramework.StandardControl<IInputs, IOu
 	 * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to names defined in the manifest, as well as utility functions
 	 */
 	public updateView(context: ComponentFramework.Context<IInputs>): void {
-		this.load3DModel();
+		const url: string = context.parameters.Url.raw as string;
+
+		this.load3DModel(url);
 	}
 
 	/** 
@@ -78,8 +77,7 @@ export class viewer3d implements ComponentFramework.StandardControl<IInputs, IOu
 
 	}
 
-	private async load3DModel() {
-		const url: string = 'https://srv-file6.gofile.io/download/48dxb8/hololens.glb';
+	private async load3DModel(url:string) {
 		await fetch(url).then(response => response.arrayBuffer().then(
 			(buffer) => {
 				this.data = "data:base64," + this.arrayBufferToBase64(buffer);

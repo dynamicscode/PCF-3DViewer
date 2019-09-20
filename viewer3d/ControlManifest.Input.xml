@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
   <control namespace="dynamicscode" constructor="viewer3d" version="0.0.1" display-name-key="DDD Viewer" description-key="View (.glb) file" control-type="standard">
-    <property name="sample" display-name-key="sample" description-key="sample" of-type="SingleLine.Text" usage="bound" required="true" />
+    <property name="Url" display-name-key="URL" description-key="Url of 3D model file." of-type="SingleLine.Text" usage="bound" required="true" />
     <resources>
       <code path="index.ts" order="1"/>
     </resources>
