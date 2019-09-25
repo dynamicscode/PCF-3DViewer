@@ -1,12 +1,15 @@
 import { IInputs, IOutputs } from "./generated/ManifestTypes";
-import { Engine, Scene, SceneLoader, Tools } from "babylonjs";
+import { Engine, Scene, SceneLoader, Tools, Node, AssetsManager, AbstractMesh, NegateBlock } from "babylonjs";
 import 'babylonjs-loaders';
+import { node } from "prop-types";
 
 export class viewer3d implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 
 	private container: HTMLDivElement;
+	private nodeContainer: HTMLDivElement;
 	private canvasElement: HTMLCanvasElement;
 	private engine: Engine;
+	private scene: Scene;
 	private data: string;
 
 	/**
@@ -27,10 +30,17 @@ export class viewer3d implements ComponentFramework.StandardControl<IInputs, IOu
 	public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void, state: ComponentFramework.Dictionary, container: HTMLDivElement) {
 		this.container = container;
 
+		this.nodeContainer = document.createElement('div');
+		this.nodeContainer.id = 'divNodeContainer';
+
 		this.canvasElement = document.createElement('canvas');
 		this.canvasElement.style.width = '100%';
 		this.canvasElement.style.height = '100%';
+
 		this.container.appendChild(this.canvasElement);
+		
+		this.container.appendChild(this.nodeContainer);
+		
 		this.engine = new Engine(this.canvasElement, true);
 	}
 
@@ -85,11 +95,35 @@ export class viewer3d implements ComponentFramework.StandardControl<IInputs, IOu
 			})
 		);
 
-		const scene: Scene = this.createScene(this.data);
+		this.scene = this.createScene(this.data);
 
 		this.engine.runRenderLoop(() => {
-			scene.render();
+			this.scene.render();
 		});
+
+		this.scene.onReadyObservable.add(this.seceneOnReady);
+	}
+
+	private seceneOnReady(s: Scene) {
+		const root: Node = s.rootNodes.filter(n => n.name === "__root__")[0];
+		if (root) {
+			const children: AbstractMesh[] = root.getChildMeshes();
+			for (let i = 0; i < children.length; i++) {
+				let nodeElement: HTMLInputElement = document.createElement('input');
+				let lable: HTMLLabelElement = document.createElement('label');
+				lable.htmlFor = children[i].id;
+				lable.textContent =  children[i].id;
+				
+				nodeElement.id = children[i].id;
+				nodeElement.style.width = "50px";
+				nodeElement.value = children[i].name;
+				nodeElement.checked = true;
+				nodeElement.type = "checkbox";
+				nodeElement.onchange = () => toggleNodeVisibility(children[i]);
+				(document.getElementById('divNodeContainer') as HTMLDivElement).appendChild(nodeElement);
+				(document.getElementById('divNodeContainer') as HTMLDivElement).appendChild(lable);
+			}
+		}
 	}
 
 	private arrayBufferToBase64(buffer: ArrayBuffer) {
@@ -100,4 +134,10 @@ export class viewer3d implements ComponentFramework.StandardControl<IInputs, IOu
 	
 		return window.btoa(binary);
 	};
+}
+
+
+
+function toggleNodeVisibility(n: AbstractMesh) {
+	n.isVisible = !n.isVisible;
 }
