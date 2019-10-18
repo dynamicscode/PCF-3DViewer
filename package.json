@@ -13,7 +13,8 @@
     "@types/powerapps-component-framework": "^1.2.0",
     "babylonjs": "^4.1.0-alpha.20",
     "babylonjs-gui": "^4.1.0-alpha.20",
-    "babylonjs-loaders": "^4.1.0-alpha.20"
+    "babylonjs-loaders": "^4.1.0-alpha.20",
+    "latest": "^0.2.0"
   },
   "devDependencies": {
     "pcf-scripts": "^0",

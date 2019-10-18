@@ -108,6 +108,9 @@ export class viewer3d implements ComponentFramework.StandardControl<IInputs, IOu
 		const root: Node = s.rootNodes.filter(n => n.name === "__root__")[0];
 		if (root) {
 			const children: AbstractMesh[] = root.getChildMeshes();
+			while (this.nodeContainer && this.nodeContainer.firstChild) {
+				this.nodeContainer.removeChild(this.nodeContainer.firstChild);
+			}
 			for (let i = 0; i < children.length; i++) {
 				let nodeElement: HTMLInputElement = document.createElement('input');
 				let lable: HTMLLabelElement = document.createElement('label');
