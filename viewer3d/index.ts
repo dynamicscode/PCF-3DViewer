@@ -108,8 +108,9 @@ export class viewer3d implements ComponentFramework.StandardControl<IInputs, IOu
 		const root: Node = s.rootNodes.filter(n => n.name === "__root__")[0];
 		if (root) {
 			const children: AbstractMesh[] = root.getChildMeshes();
-			while (this.nodeContainer && this.nodeContainer.firstChild) {
-				this.nodeContainer.removeChild(this.nodeContainer.firstChild);
+			var div = document.getElementById('divNodeContainer') as HTMLDivElement;
+			while (div.lastChild) {
+				div.removeChild(div.lastChild);
 			}
 			for (let i = 0; i < children.length; i++) {
 				let nodeElement: HTMLInputElement = document.createElement('input');
@@ -123,8 +124,8 @@ export class viewer3d implements ComponentFramework.StandardControl<IInputs, IOu
 				nodeElement.checked = true;
 				nodeElement.type = "checkbox";
 				nodeElement.onchange = () => toggleNodeVisibility(children[i]);
-				(document.getElementById('divNodeContainer') as HTMLDivElement).appendChild(nodeElement);
-				(document.getElementById('divNodeContainer') as HTMLDivElement).appendChild(lable);
+				div.appendChild(nodeElement);
+				div.appendChild(lable);
 			}
 		}
 	}
