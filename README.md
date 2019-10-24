@@ -1,7 +1,9 @@
 # PCF-3DViewer
 Experimental 3D viewer in #PowerAppsComponentFramework
 
-## 3D Files
+Set url property to a .glb file. You can use following files for testing purpose.
+
+## Sample 3D Files
 * https://srv-file7.gofile.io/download/yvfmJG/triceratops.glb
 * https://srv-file7.gofile.io/download/svz6kh/troll.glb
 * https://srv-file7.gofile.io/download/lMZgQH/curiosity.glb
